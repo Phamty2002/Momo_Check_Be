@@ -1,3 +1,5 @@
+// server.js
+
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
@@ -6,9 +8,9 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Cấu hình CORS để cho phép frontend
+// Cấu hình CORS để cho phép frontend trên Vercel
 app.use(cors({
-    origin: 'http://localhost:3000', // URL của frontend
+    origin: 'https://your-frontend-domain.vercel.app', // Thay thế bằng domain frontend trên Vercel
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type']
 }));
@@ -24,7 +26,7 @@ app.post('/api/check-momo', async (req, res) => {
 
     try {
         const response = await axios.post('https://momosv3.apimienphi.com/api/checkMomoUser', {
-            access_token: process.env.ACCESS_TOKEN,
+            access_token: process.env.ACCESS_TOKEN, // Lấy từ biến môi trường
             phone: phone
         }, {
             headers: {
@@ -33,7 +35,7 @@ app.post('/api/check-momo', async (req, res) => {
         });
 
         // Giả sử API Momo trả về dữ liệu như sau
-        // { success: true, registered: true, message: "..." }
+        // { error: 0, phone: "0945173179", name: "Nguyễn Duy Thông" }
         return res.status(200).json(response.data);
     } catch (error) {
         console.error('Error calling Momo API:', error.message);
