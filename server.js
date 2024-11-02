@@ -8,9 +8,22 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Cấu hình CORS để cho phép frontend trên Vercel
+// Cấu hình CORS để cho phép frontend trên Vercel và cục bộ
+const allowedOrigins = [
+    'https://momo-frontend.vercel.app', // Domain frontend trên Vercel
+    'http://localhost:3000' // Origin của máy tính cục bộ khi phát triển
+];
+
 app.use(cors({
-    origin: 'https://momo-check-fe.vercel.app/', // Thay thế bằng domain frontend trên Vercel
+    origin: function (origin, callback) {
+        // Bỏ qua kiểm tra origin nếu origin không được xác định (ví dụ: Postman)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'Origin không được phép bởi CORS';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type']
 }));
@@ -47,6 +60,11 @@ app.post('/api/check-momo', async (req, res) => {
 // Route mặc định để kiểm tra backend đang chạy
 app.get('/', (req, res) => {
     res.send('Momo Check Backend is running.');
+});
+
+// Route kiểm tra trạng thái backend
+app.get('/api/status', (req, res) => {
+    res.json({ status: 'Backend is running properly.' });
 });
 
 // Khởi động server
