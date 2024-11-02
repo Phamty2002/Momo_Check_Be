@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 5000;
 
 // Cấu hình CORS để cho phép frontend trên Vercel và cục bộ
 const allowedOrigins = [
-    'https://momo-check-fe.vercel.app/', // Domain frontend trên Vercel
+    'https://momo-check-fe.vercel.app', // Domain frontend trên Vercel
     'http://localhost:3000' // Origin của máy tính cục bộ khi phát triển
 ];
 
