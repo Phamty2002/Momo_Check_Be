@@ -10,10 +10,11 @@ const PORT = process.env.PORT || 5000;
 
 // Cấu hình CORS để cho phép frontend trên Vercel
 app.use(cors({
-    origin: 'https://your-frontend-domain.vercel.app', // Thay thế bằng domain frontend trên Vercel
+    origin: 'https://momo-check-fe.vercel.app/', // Thay thế bằng domain frontend trên Vercel
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type']
 }));
+
 app.use(express.json());
 
 // Route để kiểm tra tài khoản Momo
@@ -26,7 +27,7 @@ app.post('/api/check-momo', async (req, res) => {
 
     try {
         const response = await axios.post('https://momosv3.apimienphi.com/api/checkMomoUser', {
-            access_token: process.env.ACCESS_TOKEN, // Lấy từ biến môi trường
+            access_token: process.env.ACCESS_TOKEN,
             phone: phone
         }, {
             headers: {
@@ -43,7 +44,7 @@ app.post('/api/check-momo', async (req, res) => {
     }
 });
 
-// Route mặc định
+// Route mặc định để kiểm tra backend đang chạy
 app.get('/', (req, res) => {
     res.send('Momo Check Backend is running.');
 });
