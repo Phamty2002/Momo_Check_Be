@@ -3,7 +3,7 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
-const mongoose = require('mongoose'); // Thêm mongoose
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -96,11 +96,11 @@ app.post('/api/register', async (req, res) => {
         const newUser = new User({ username, email, password: hashedPassword });
         await newUser.save();
 
-        // Tạo token JWT
+        // Tạo token JWT mà không có thời gian hết hạn
         const token = jwt.sign(
             { id: newUser._id, username: newUser.username },
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }
+            process.env.JWT_SECRET
+            // { expiresIn: '1h' } // Đã loại bỏ
         );
 
         res.status(201).json({ token, user: { id: newUser._id, username: newUser.username, email: newUser.email } });
@@ -132,11 +132,11 @@ app.post('/api/login', async (req, res) => {
             return res.status(400).json({ message: 'Mật khẩu không chính xác' });
         }
 
-        // Tạo token JWT
+        // Tạo token JWT mà không có thời gian hết hạn
         const token = jwt.sign(
             { id: user._id, username: user.username },
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }
+            process.env.JWT_SECRET
+            // { expiresIn: '1h' } // Đã loại bỏ
         );
 
         res.status(200).json({ token, user: { id: user._id, username: user.username, email: user.email } });
